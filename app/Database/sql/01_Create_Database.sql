@@ -1,0 +1,19 @@
+USE student_management;
+GO
+
+CREATE TABLE Users
+(
+    UserID INT IDENTITY(1,1) PRIMARY KEY,
+
+    FullName VARCHAR(100) NOT NULL,
+
+    Email VARCHAR(100) NOT NULL UNIQUE,
+
+    Password VARCHAR(255) NOT NULL,
+
+    Role VARCHAR(20) NOT NULL DEFAULT 'Teacher',
+
+    CreatedAt DATETIME DEFAULT GETDATE(),
+
+    UpdatedAt DATETIME NULL
+);

@@ -1,0 +1,81 @@
+/* ==========================================
+   RTL Layout Fix
+========================================== */
+
+body{
+    direction: rtl;
+    text-align: right;
+}
+
+/* Sidebar */
+.sidebar{
+    right:0;
+    left:auto;
+}
+
+/* Active blue line */
+.sidebar-nav ul li a.active::before{
+    right:0;
+    left:auto;
+}
+
+/* Main wrapper */
+.main-wrapper{
+    margin-right:270px;
+    margin-left:0;
+}
+
+/* Topbar */
+.topbar{
+    right:270px;
+    left:0;
+}
+
+/* Search */
+.search-box input{
+    text-align:right;
+    padding:12px 45px 12px 20px;
+}
+
+.search-box i{
+    right:18px;
+    left:auto;
+}
+
+/* Profile */
+.profile{
+    flex-direction:row-reverse;
+}
+
+.profile div{
+    text-align:right;
+}
+
+/* Notification dot */
+.notify-dot{
+    left:10px;
+    right:auto;
+}
+
+/* Tables */
+.table{
+    direction:rtl;
+}
+
+.table th,
+.table td{
+    text-align:right;
+}
+
+/* Forms */
+.form-control,
+.form-select,
+textarea{
+    text-align:right;
+}
+
+/* Dropdown */
+.dropdown-menu{
+    direction:rtl;
+    text-align:right;
+}
