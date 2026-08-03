@@ -7,18 +7,46 @@ use App\Models\ClassModel;
 
 class Students extends BaseController
  {
+
+
+
+
+
+ 
     public function index()
  {
-        $model = new StudentModel();
 
-        $data = [
-            'title'    => 'Students',
-            'students' => $model->where('Status', 'Active')->findAll(),
+ $model = new StudentModel();
 
-        ];
+$search = trim($this->request->getGet('search'));
 
-        echo '';
-        return view( 'students/index', $data );
+if (!empty($search)) {
+
+    $model->groupStart()
+          ->like('StudentName', $search)
+          ->orLike('FatherName', $search)
+          ->orLike('RollNo', $search)
+           ->orLike('Email', $search)
+          ->groupEnd();
+
+}
+
+$data = [
+
+    'title' => 'Students',
+
+    'students' => $model
+        ->where('Status', 'Active')
+        ->paginate(8, 'students'),
+
+    'pager' => $model->pager,
+
+    'search' => $search
+
+];
+
+return view('students/index', $data);
+        
     }
 
     public function create()
@@ -90,6 +118,25 @@ return redirect()
     ->with('success', lang('App.studentAddedSuccessfully'));
     
     }
+
+
+
+    public function getRecentStudents($limit = 5)
+{
+    $model = new StudentModel();
+
+    return $model
+        ->select('Students.StudentID,
+                  Students.RollNo,
+                  Students.StudentName,
+                  Students.Photo,
+                  Students.CreatedAt,
+                  Classes.ClassName')
+        ->join('Classes', 'Classes.ClassID = Students.ClassID', 'left')
+        ->where('Students.Status', 'Active')
+        ->orderBy('Students.CreatedAt', 'DESC')
+        ->findAll($limit);
+}
 
     public function edit( $id )
  {
@@ -170,7 +217,7 @@ return redirect()
         return redirect()
         ->to( '/students' )->with('success', lang('App.studentUpdatedSuccessfully'));
  }
-
+  
 
 public function restore($id)
 {

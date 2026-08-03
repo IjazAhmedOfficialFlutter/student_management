@@ -33,6 +33,13 @@ class Test extends BaseController
         echo '</pre>';
     }
 
+public function verifyHash()
+{
+
+       echo password_hash('123456', PASSWORD_DEFAULT);
+
+}
+
     public function students()
  {
         $model = new \App\Models\StudentModel();

@@ -31,12 +31,59 @@
 </div>
 
 <?php endif; ?>
+
+
+<div class="card shadow-sm mb-3">
+
+    <div class="card-body">
+
+        <form method="get" action="<?= site_url('students') ?>">
+
+            <div class="row g-2 align-items-center">
+
+                <div class="col-md-8">
+
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="Search by Roll No, Student Name or Father Name"
+                        value="<?= esc($search ?? '') ?>">
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-search"></i>
+                        Search
+                    </button>
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <a href="<?= site_url('students') ?>"
+                       class="btn btn-secondary w-100">
+                        <i class="bi bi-arrow-clockwise"></i>
+                        Clear
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
     <table class="table table-bordered table-striped">
 
         <thead class="table-dark">
 
         <tr>
-            <th><?= lang('App.id') ?></th>
+            <th><?= 'Sr.' ?></th>
             
             <th><?= lang('App.rollNo') ?></th>
             <th><?= lang('App.studentName') ?></th>
@@ -74,26 +121,22 @@
                     <td>
 
         
+          <a href="<?= site_url('students/edit/'.$student['StudentID']) ?>"
+               class="btn btn-primary btn-sm"
+                   title="Edit">
+                <i class="bi bi-pencil-square"></i>
+                  </a>
 
-
-                       <button
-    type="button"
-    class="btn btn-primary btn-sm"
-    onclick="window.location.href='<?= site_url('students/edit/' . $student['StudentID']) ?>'">
-    <i class="bi bi-pencil-square"></i>
-    <?= lang('App.edit') ?>
-</button>
-                        <button
-                            class="btn btn-warning btn-sm archiveBtn"
-                            data-id="<?= $student['StudentID'] ?>"
-                            data-name="<?= esc($student['StudentName']) ?>">
+                  <button class="btn btn-warning btn-sm archiveBtn"
+                        title="Archive">
                             <i class="bi bi-archive-fill"></i>
-                            <?= lang('App.archive') ?>
-                        </button>
-
+                      </button>  
                     </td>
+                    
 
                 </tr>
+
+                
 
             <?php endforeach; ?>
 
@@ -112,10 +155,40 @@
         </tbody>
 
     </table>
+<div class="d-flex justify-content-between align-items-center mt-3">
+
+    <div>
+        Showing <?= count($students) ?> records
+    </div>
+
+    <div>
+
+
+<?= $pager->links('students', 'bootstrap') ?>
+    </div>
 
 </div>
 <script>
 
+document.querySelectorAll('.statusBtn').forEach(function(button){
+
+    button.addEventListener('click', function(){
+
+        let id = this.dataset.id;
+        let name = this.dataset.name;
+        let status = this.dataset.status;
+
+        if(confirm("Do you want to change " + name + " to " + status + "?")){
+
+            window.location.href =
+            "<?= site_url('students/changeStatus/') ?>" +
+            id + "/" + status;
+
+        }
+
+    });
+
+});
 document.querySelectorAll('.archiveBtn').forEach(function(btn){
 
     btn.addEventListener('click', function(){
@@ -139,7 +212,7 @@ document.querySelectorAll('.archiveBtn').forEach(function(btn){
 });
 
 </script>
-<!-- Delete Modal -->
+
 <div class="modal fade" id="archiveModal" tabindex="-1">
 
     <div class="modal-dialog">

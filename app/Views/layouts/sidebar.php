@@ -1,3 +1,12 @@
+<?php
+
+$role = session('Role');
+
+$isAdmin   = ($role === 'Admin');
+$isTeacher = ($role === 'Teacher');
+
+?>
+
 <div class="sidebar">
 
     <?php $request = service('request'); ?>
@@ -32,12 +41,32 @@
 
         <ul>
             <li>
+                <a href="<?= site_url('teachers') ?>"
+                   class="<?= $request->getUri()->getSegment(1) == 'teachers' ? 'active' : '' ?>">
+                    <i class="bi bi-people-fill"></i>
+                    <span><?= lang('App.teachers') ?></span>
+                </a>
+            </li>
+
+<li>
+    <a href="<?= site_url('teachers/archived') ?>"
+       class="<?= $request->getUri()->getSegment(2) == 'archived' ? 'active' : '' ?>">
+
+        <i class="bi bi-archive"></i>
+
+        <span><?= lang('App.archivedTeachers') ?></span>
+
+    </a>
+</li>
+            
+             <li>
                 <a href="<?= site_url('students') ?>"
                    class="<?= $request->getUri()->getSegment(1) == 'students' ? 'active' : '' ?>">
                     <i class="bi bi-people-fill"></i>
                     <span><?= lang('App.students') ?></span>
                 </a>
             </li>
+
 
             <li>
                 <a href="<?= site_url('classes') ?>"

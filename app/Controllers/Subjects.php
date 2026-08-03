@@ -4,25 +4,31 @@ namespace App\Controllers;
 
 use App\Models\SubjectModel;
 use App\Models\ClassModel;
+use App\Models\TeacherAssignmentModel;
 
 class Subjects extends BaseController
 {
-    public function index()
-    {
-        $subjectModel = new SubjectModel();
 
-        $subjects = $subjectModel
-            ->select('Subjects.*, Classes.ClassName')
-            ->join('Classes', 'Classes.ClassID = Subjects.ClassID', 'left')
-            ->findAll();
 
-        $data = [
-            'title'    => 'Subjects',
-            'subjects' => $subjects,
-        ];
+public function index()
+{
+    $assignmentModel = new TeacherAssignmentModel();
+    $classModel      = new ClassModel();
+$subjectModel = new SubjectModel();
+    $data = [
 
-        return view('subjects/index', $data);
-    }
+        'title'    => 'Subjects',
+    'subjects' => $subjectModel->getAllSubjects(),
+
+
+        'classes'  => $classModel->findAll(),
+
+    ];
+
+    return view('subjects/index', $data);
+}
+
+
 
     public function create()
     {
@@ -133,4 +139,46 @@ private function subjectRules($id = null)
         ],
     ];
 }
+public function show($id)
+{
+    $subjectModel = new SubjectModel();
+
+    $subject = $subjectModel
+        ->select('
+            Subjects.*,
+            Classes.ClassName,
+            Teachers.TeacherName,
+            Teachers.EmployeeNo,
+            Teachers.Status AS TeacherStatus,
+            TeacherAssignments.Status AS AssignmentStatus
+        ')
+        ->join(
+            'TeacherAssignments',
+            'TeacherAssignments.SubjectID = Subjects.SubjectID',
+            'left'
+        )
+        ->join(
+            'Teachers',
+            'Teachers.TeacherID = TeacherAssignments.TeacherID',
+            'left'
+        )
+        ->join(
+            'Classes',
+            'Classes.ClassID = Subjects.ClassID',
+            'left'
+        )
+        ->where('Subjects.SubjectID', $id)
+        ->first();
+
+    if (!$subject) {
+        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+    }
+
+    return view('subjects/show', [
+        'title'   => 'Subject Details',
+        'subject' => $subject
+    ]);
+}
+
+
 }

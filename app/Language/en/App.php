@@ -41,7 +41,6 @@ return [
     'class'                   => 'Class',
     'section'                 => 'Section',
     'address'                 => 'Address',
-    'photo'                   => 'Photo',
     'studentPhoto'            => 'Student Photo',
     'cnic'                    => 'CNIC',
 
@@ -106,11 +105,9 @@ return [
 'classStudents'          => 'Students enrolled in this class',
 'editClass'              => 'Edit Class',
 'backToClasses'          => 'Back to Classes',
-'totalStudents'          => 'Total Students',
 'studentList'            => 'Student List',
 
 'photo'                  => 'Photo',
-'student'                => 'Student',
 'father'                 => 'Father',
 'actions'                => 'Actions',
 
@@ -121,7 +118,6 @@ return [
     'saveClass'   => 'Save Class',
     'studentDeleted'         => 'Student deleted successfully.',
 'studentDeleteRestricted'=> 'This student cannot be deleted because attendance records exist.',
-'studentNotFound'        => 'Student not found.',
 'archive' => 'Archive',
 'archivedStudents' => 'Archived Students',
 'confirmArchive' => 'Confirm Archive',
@@ -151,4 +147,158 @@ return [
 // Error Messages
 'studentNotFound'              => 'Student not found.',
 'somethingWentWrong'           => 'Something went wrong.',
+
+
+// Attendance
+'attendanceManagement'      => 'Attendance Management',
+'markAttendance'            => 'Mark Attendance',
+'attendanceHistory'         => 'Attendance History',
+'attendanceDate'            => 'Attendance Date',
+'selectDate'                => 'Select Date',
+
+'present'                   => 'Present',
+'absent'                    => 'Absent',
+'late'                      => 'Late',
+
+'presentAll'                => 'Present All',
+'absentAll'                 => 'Absent All',
+'lateAll'                   => 'Late All',
+
+'searchStudent'             => 'Search Student',
+
+'saveAttendance'            => 'Save Attendance',
+
+'markingAttendanceFor'      => 'Marking attendance for',
+
+
+'noStudentsInClass'         => 'No students found in this class.',
+
+'attendanceSaved'           => 'Attendance saved successfully.',
+
+'attendanceProgress'        => 'Attendance Progress',
+
+'markedStudents'            => 'Marked Students',
+
+'selectClassAndDate'        => 'Select Class and Date',
+
+'archived' => 'Archived',
+
+'yes' => 'Yes',
+'no' => 'No',
+'close' => 'Close',
+'view' => 'View',
+'create' => 'Create',
+'reset' => 'Reset',
+'clear' => 'Clear',
+'filter' => 'Filter',
+'export' => 'Export',
+'import' => 'Import',
+'download' => 'Download',
+'upload' => 'Upload',
+'print' => 'Print',
+
+
+
+'teacherAddedSuccessfully' => 'Teacher added successfully.',
+'teacherUpdatedSuccessfully' => 'Teacher updated successfully.',
+'teacherArchivedSuccessfully' => 'Teacher archived successfully.',
+'teacherRestoredSuccessfully' => 'Teacher restored successfully.',
+
+'teacherNotFound' => 'Teacher not found.',
+
+'teacherName' => 'Teacher Name',
+'employeeNo' => 'Employee No',
+'qualification' => 'Qualification',
+'experience' => 'Experience',
+'joiningDate' => 'Joining Date',
+
+
+
+'teachers' => 'Teachers',
+
+'teacher' => 'Teacher',
+
+'addTeacher' => 'Add Teacher',
+
+'editTeacher' => 'Edit Teacher',
+
+'teacherProfile' => 'Teacher Profile',
+
+
+'teacherPhoto' => 'Teacher Photo',
+
+'activeTeachers' => 'Active Teachers',
+
+'archivedTeachers' => 'Archived Teachers',
+
+
+'archiveTeacher' => 'Archive Teacher',
+
+'restoreTeacher' => 'Restore Teacher',
+'teacherInformation'     => 'Teacher Information',
+'personalInformation'    => 'Personal Information',
+'contactInformation'     => 'Contact Information',
+'professionalInformation'=> 'Professional Information',
+
+
+
+
+// Teacher Assignments
+'teacherAssignments'               => 'Teacher Assignments',
+'teacherAssignment'                => 'Teacher Assignment',
+
+'addTeacherAssignment'             => 'Add Teacher Assignment',
+'editTeacherAssignment'            => 'Edit Teacher Assignment',
+'teacherAssignmentDetails'         => 'Teacher Assignment Details',
+
+'assignTeacher'                    => 'Assign Teacher',
+'assignedTeacher'                  => 'Assigned Teacher',
+
+'assignment'                       => 'Assignment',
+'assignmentID'                     => 'Assignment ID',
+
+'selectTeacher'                    => 'Select Teacher',
+'selectSubject'                    => 'Select Subject',
+
+'subject'                          => 'Subject',
+
+'assignmentStatus'                 => 'Assignment Status',
+
+'saveAssignment'                   => 'Save Assignment',
+'updateAssignment'                 => 'Update Assignment',
+
+'activeAssignments'                => 'Active Assignments',
+'archivedAssignments'              => 'Archived Assignments',
+
+'archiveAssignment'                => 'Archive Assignment',
+'restoreAssignment'                => 'Restore Assignment',
+
+'teacherAssignmentInformation'     => 'Teacher Assignment Information',
+
+'assignmentAddedSuccessfully'      => 'Teacher assignment added successfully.',
+'assignmentUpdatedSuccessfully'    => 'Teacher assignment updated successfully.',
+'assignmentArchivedSuccessfully'   => 'Teacher assignment archived successfully.',
+'assignmentRestoredSuccessfully'   => 'Teacher assignment restored successfully.',
+
+'assignmentNotFound'               => 'Teacher assignment not found.',
+
+'assignmentAlreadyExists'          => 'This teacher is already assigned to this subject and class.',
+
+'noAssignmentsFound'               => 'No teacher assignments found.',
+
+'manageTeachers' => 'Manage all teachers in your school.',
+'teacherList'    => 'Teacher List',
+'allStatus'      => 'All Status',
+'searchTeacher' => 'Search Teacher',
+
+'archivedTeachersDescription' => 'View and restore archived teachers.',
+'backToTeachers'              => 'Back to Teachers',
+
+'noTeachersFound'             => 'No archived teachers found.',
+
+'archivedTeachersInfo'        => 'Archived teachers are hidden from the active teacher list while keeping all assignments and historical records intact. You can restore them at any time.',
+'noArchivedTeachers'          => 'No Archived Teachers Found',
+'restoreTeacherWarning'       => 'The teacher will become active again and will appear in the active teachers list.',
+    'notAssigned' => 'Not Assigned',
+
 ];

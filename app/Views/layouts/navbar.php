@@ -34,14 +34,14 @@
 
     </div>
 
-    <div class="search-box">
+    <!-- <div class="search-box">
 
         <i class="bi bi-search"></i>
 
         <input type="text"
                placeholder=<?= lang('App.searchHere') ?>>
 
-    </div>
+    </div> -->
 
     <div class="top-right">
 

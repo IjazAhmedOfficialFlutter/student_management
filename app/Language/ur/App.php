@@ -105,11 +105,8 @@ return [
 'classStudents'          => 'اس کلاس میں داخل طلباء',
 'editClass'              => 'کلاس میں ترمیم کریں',
 'backToClasses'          => 'کلاسوں پر واپس جائیں',
-'totalStudents'          => 'کل طلباء',
 'studentList'            => 'طلباء کی فہرست',
 
-'photo'                  => 'تصویر',
-'student'                => 'طالب علم',
 'father'                 => 'والد',
 'actions'                => 'اعمال',
 
@@ -127,7 +124,6 @@ return [
 'confirmArchive' => 'محفوظ کرنے کی تصدیق',
 'archiveConfirmation' => 'کیا آپ واقعی اس طالب علم کو محفوظ کرنا چاہتے ہیں',
 'archiveWarning' => 'یہ طالب علم فعال فہرست سے ہٹا دیا جائے گا لیکن بعد میں بحال کیا جا سکے گا۔',
-'archivedStudents' => 'آرکائیو شدہ طلبہ',
 
 'archivedStudentsDescription' => 'فعال طلبہ کی فہرست سے آرکائیو کیے گئے طلبہ کو دیکھیں اور ان کا انتظام کریں۔',
 
@@ -147,7 +143,154 @@ return [
 'studentRestoredSuccessfully'  => 'طالب علم کو کامیابی سے بحال کر دیا گیا۔',
 
 // خرابی کے پیغامات
-'studentNotFound'              => 'طالب علم نہیں ملا۔',
 'somethingWentWrong'           => 'کچھ غلط ہو گیا۔',
+
+// Attendance
+'attendanceManagement'      => 'حاضری کا انتظام',
+'markAttendance'            => 'حاضری لگائیں',
+'attendanceHistory'         => 'حاضری کی تاریخ',
+'attendanceDate'            => 'حاضری کی تاریخ',
+'selectDate'                => 'تاریخ منتخب کریں',
+
+'present'                   => 'حاضر',
+'absent'                    => 'غیر حاضر',
+'late'                      => 'تاخیر سے',
+
+'presentAll'                => 'سب حاضر',
+'absentAll'                 => 'سب غیر حاضر',
+'lateAll'                   => 'سب تاخیر سے',
+
+'searchStudent'             => 'طالب علم تلاش کریں',
+
+'saveAttendance'            => 'حاضری محفوظ کریں',
+
+'markingAttendanceFor'      => 'اس تاریخ کی حاضری',
+
+'noStudentsInClass'         => 'اس کلاس میں کوئی طالب علم موجود نہیں۔',
+
+'attendanceSaved'           => 'حاضری کامیابی سے محفوظ ہو گئی۔',
+
+'attendanceProgress'        => 'حاضری کی پیش رفت',
+
+'markedStudents'            => 'حاضری مکمل',
+
+'selectClassAndDate'        => 'کلاس اور تاریخ منتخب کریں',
+'yes' => 'ہاں',
+'no' => 'نہیں',
+'close' => 'بند کریں',
+'view' => 'دیکھیں',
+'create' => 'بنائیں',
+'archived' => 'آرکائیو شدہ',
+'reset' => 'ری سیٹ',
+'clear' => 'صاف کریں',
+'filter' => 'فلٹر',
+'export' => 'ایکسپورٹ',
+'import' => 'امپورٹ',
+'download' => 'ڈاؤن لوڈ',
+'upload' => 'اپ لوڈ',
+'print' => 'پرنٹ',
+
+
+'teacherAddedSuccessfully' => 'استاد کامیابی سے شامل کر دیا گیا۔',
+'teacherUpdatedSuccessfully' => 'استاد کی معلومات کامیابی سے اپ ڈیٹ کر دی گئیں۔',
+'teacherArchivedSuccessfully' => 'استاد کو کامیابی سے آرکائیو کر دیا گیا۔',
+'teacherRestoredSuccessfully' => 'استاد کو کامیابی سے بحال کر دیا گیا۔',
+
+'teacherNotFound' => 'استاد نہیں ملا۔',
+
+'teacherName' => 'استاد کا نام',
+'employeeNo' => 'ملازم نمبر',
+'qualification' => 'تعلیمی قابلیت',
+'experience' => 'تجربہ',
+'joiningDate' => 'تاریخ تقرری',
+
+'teachers' => 'اساتذہ',
+
+'teacher' => 'استاد',
+
+'addTeacher' => 'استاد شامل کریں',
+
+'editTeacher' => 'استاد میں ترمیم کریں',
+
+'teacherProfile' => 'استاد کا پروفائل',
+
+
+'teacherPhoto' => 'استاد کی تصویر',
+
+'activeTeachers' => 'فعال اساتذہ',
+
+'archivedTeachers' => 'آرکائیو شدہ اساتذہ',
+
+
+'archiveTeacher' => 'استاد کو آرکائیو کریں',
+
+'restoreTeacher' => 'استاد بحال کریں',
+
+
+'teacherInformation'      => 'استاد کی معلومات',
+'personalInformation'     => 'ذاتی معلومات',
+'contactInformation'      => 'رابطے کی معلومات',
+'professionalInformation' => 'پیشہ ورانہ معلومات',
+
+
+
+// Teacher Assignments
+'teacherAssignments'               => 'اساتذہ کی اسائنمنٹس',
+'teacherAssignment'                => 'استاد کی اسائنمنٹ',
+
+'addTeacherAssignment'             => 'استاد کی اسائنمنٹ شامل کریں',
+'editTeacherAssignment'            => 'استاد کی اسائنمنٹ میں ترمیم کریں',
+'teacherAssignmentDetails'         => 'استاد کی اسائنمنٹ کی تفصیلات',
+
+'assignTeacher'                    => 'استاد مقرر کریں',
+'assignedTeacher'                  => 'مقرر شدہ استاد',
+
+'assignment'                       => 'اسائنمنٹ',
+'assignmentID'                     => 'اسائنمنٹ نمبر',
+
+'selectTeacher'                    => 'استاد منتخب کریں',
+'selectSubject'                    => 'مضمون منتخب کریں',
+
+'subject'                          => 'مضمون',
+
+'assignmentStatus'                 => 'اسائنمنٹ کی حیثیت',
+
+'saveAssignment'                   => 'اسائنمنٹ محفوظ کریں',
+'updateAssignment'                 => 'اسائنمنٹ اپ ڈیٹ کریں',
+
+'activeAssignments'                => 'فعال اسائنمنٹس',
+'archivedAssignments'              => 'آرکائیو شدہ اسائنمنٹس',
+
+'archiveAssignment'                => 'اسائنمنٹ آرکائیو کریں',
+'restoreAssignment'                => 'اسائنمنٹ بحال کریں',
+
+'teacherAssignmentInformation'     => 'استاد کی اسائنمنٹ کی معلومات',
+
+'assignmentAddedSuccessfully'      => 'استاد کی اسائنمنٹ کامیابی سے شامل کر دی گئی۔',
+'assignmentUpdatedSuccessfully'    => 'استاد کی اسائنمنٹ کامیابی سے اپ ڈیٹ کر دی گئی۔',
+'assignmentArchivedSuccessfully'   => 'استاد کی اسائنمنٹ کامیابی سے آرکائیو کر دی گئی۔',
+'assignmentRestoredSuccessfully'   => 'استاد کی اسائنمنٹ کامیابی سے بحال کر دی گئی۔',
+
+'assignmentNotFound'               => 'استاد کی اسائنمنٹ نہیں ملی۔',
+
+'assignmentAlreadyExists'          => 'یہ استاد اس کلاس میں اس مضمون کے لیے پہلے ہی مقرر کیا جا چکا ہے۔',
+
+'noAssignmentsFound'               => 'کوئی استاد کی اسائنمنٹ موجود نہیں۔',
+
+
+'manageTeachers' => 'اپنے اسکول کے تمام اساتذہ کا انتظام کریں۔',
+'teacherList'    => 'اساتذہ کی فہرست',
+'allStatus'      => 'تمام حیثیتیں',
+
+    'notAssigned' => 'تفویض نہیں کیا گیا',
+'searchTeacher' => 'استاد تلاش کریں',
+
+'archivedTeachersDescription' => 'آرکائیو شدہ اساتذہ کو دیکھیں اور بحال کریں۔',
+'backToTeachers'              => 'اساتذہ کی فہرست پر واپس جائیں',
+'noTeachersFound'             => 'کوئی آرکائیو شدہ استاد موجود نہیں۔',
+
+'archivedTeachersInfo'        => 'آرکائیو شدہ اساتذہ فعال فہرست سے چھپ جاتے ہیں لیکن ان کی تمام معلومات اور ریکارڈ محفوظ رہتا ہے۔ آپ انہیں کسی بھی وقت بحال کر سکتے ہیں۔',
+'noArchivedTeachers'          => 'کوئی آرکائیو شدہ استاد موجود نہیں۔',
+'restoreTeacherWarning'       => 'استاد دوبارہ فعال ہو جائے گا اور فعال اساتذہ کی فہرست میں ظاہر ہوگا۔',
 
 ];

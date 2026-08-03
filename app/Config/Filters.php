@@ -38,8 +38,10 @@ class Filters extends BaseFilters
     'cors'          => Cors::class,
 
     // Custom filter
+    'role' => \App\Filters\RoleFilter::class,
     'auth'          => \App\Filters\AuthFilter::class,
     'language' => \App\Filters\LanguageFilter::class,
+    
 ];
     /**
      * List of special required filters.
