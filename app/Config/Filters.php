@@ -41,6 +41,8 @@ class Filters extends BaseFilters
     'role' => \App\Filters\RoleFilter::class,
     'auth'          => \App\Filters\AuthFilter::class,
     'language' => \App\Filters\LanguageFilter::class,
+    'jwt' => \App\Filters\JwtFilter::class,
+     'apiRole' => \App\Filters\ApiRoleFilter::class,
     
 ];
     /**

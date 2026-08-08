@@ -187,3 +187,35 @@ $routes->get('show/(:num)', 'Subjects::show/$1');
     $routes->post('auth/update-password/(:num)', 'Auth::updatePassword/$1');
 
 });
+
+$routes->group('api', function ($routes) {
+
+    // Public
+    $routes->post('login', 'Api\AuthController::login');
+
+    // JWT Protected
+    $routes->group('', ['filter' => 'jwt'], function ($routes) {
+
+        $routes->post('refresh-token', 'Api\AuthController::refreshToken');
+
+        // ===========================
+        // Admin Only
+        // ===========================
+        $routes->post('students', 'Api\StudentController::create', ['filter' => 'apiRole:Admin']);
+        $routes->put('students/(:num)', 'Api\StudentController::update/$1', ['filter' => 'apiRole:Admin']);
+        $routes->delete('students/(:num)', 'Api\StudentController::delete/$1', ['filter' => 'apiRole:Admin']);
+
+        // ===========================
+        // Admin + Teacher
+        // ===========================
+ $routes->get(
+    'students',
+    'Api\StudentController::index',
+   ['filter' => 'apiRole:Admin,Teacher']
+);
+        // $routes->get('students', 'Api\StudentController::index', ['filter' => 'apiRole:Admin,Teacher']);
+        $routes->get('students/(:num)', 'Api\StudentController::show/$1', ['filter' => 'apiRole:Admin,Teacher']);
+
+    });
+
+});
