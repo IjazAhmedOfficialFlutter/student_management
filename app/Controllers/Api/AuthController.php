@@ -2,16 +2,18 @@
 
 namespace App\Controllers\Api;
 
-use App\Models\UserModel;
-use App\Helpers\JwtHelper;
+use App\Services\ApiService;
+
 class AuthController extends BaseApiController
 {
-    protected UserModel $userModel;
+    protected ApiService $apiService;
 
     public function __construct()
     {
-        $this->userModel = new UserModel();
+        $this->apiService = new ApiService();
     }
+
+
 public function login()
 {
     $rules = [
@@ -20,56 +22,109 @@ public function login()
     ];
 
     if (!$this->validate($rules)) {
-        return $this->validationError($this->validator->getErrors());
+        return $this->validationError(
+            $this->validator->getErrors()
+        );
     }
 
     $email = $this->request->getPost('Email');
     $password = $this->request->getPost('Password');
 
-    $user = $this->userModel->findByEmail($email);
+    try {
+        // Send login request to ASP.NET API
+        $response = $this->apiService->post(
+            'api/auth/login',
+            [
+                'email' => $email,
+                'password' => $password,
+            ]
+        );
 
-    if (!$user) {
+        // TEMPORARY DEBUG OUTPUT
+        echo '<h2>ASP.NET API RESPONSE</h2>';
+
+        echo '<pre>';
+        var_dump($response);
+        echo '</pre>';
+
+        exit;
+
+    } catch (\Throwable $e) {
         return $this->errorResponse(
-            'Invalid email or password.',
-            401
+            'Authentication service is unavailable.',
+            503
         );
     }
-
-    if ($user['Status'] !== 'Active') {
-        return $this->errorResponse(
-            'Your account is inactive.',
-            403
-        );
-    }
-
-    if (!password_verify($password, $user['Password'])) {
-        return $this->errorResponse(
-            'Invalid email or password.',
-            401
-        );
-    }
-    $token = JwtHelper::generateToken([
-    'UserID' => $user['UserID'],
-    'Email'  => $user['Email'],
-    'Role'   => $user['Role'],
-]);
-
-    $this->userModel->resetFailedAttempts($user['UserID']);
-    $this->userModel->updateLastLogin($user['UserID']);
-
-  return $this->successResponse(
-    [
-        'user' => [
-            'UserID'   => $user['UserID'],
-            'FullName' => $user['FullName'],
-            'Email'    => $user['Email'],
-            'Role'     => $user['Role'],
-        ],
-        'token' => $token,
-    ],
-    'Login successful.'
-);
 }
 
 
+
+    // public function login()
+    // {
+    //     // Validate request
+    //     $rules = [
+    //         'Email' => 'required|valid_email',
+    //         'Password' => 'required',
+    //     ];
+
+    //     if (!$this->validate($rules)) {
+    //         return $this->validationError(
+    //             $this->validator->getErrors()
+    //         );
+    //     }
+
+    //     $email = $this->request->getPost('Email');
+    //     $password = $this->request->getPost('Password');
+
+    //     try {
+    //         // Send login request to ASP.NET API
+    //         $response = $this->apiService->post(
+    //             'api/auth/login',
+    //             [
+    //                 'email' => $email,
+    //                 'password' => $password,
+    //             ]
+    //         );
+           
+
+    //         // TEMPORARY DEBUG OUTPUT 
+    //         echo '<h2>ASP.NET API RESPONSE</h2>'; echo '<pre>'; var_dump($response); echo '</pre>'; exit;
+    //         // Print API response for confirmation echo '<pre>'; print_r($apiResponse); echo '</pre>'; exit;
+    //         } catch (\Throwable $e) {
+    //         return $this->errorResponse(
+    //             'Authentication service is unavailable.',
+    //             503
+    //         );
+    //     }
+
+    //     $statusCode = $response['statusCode'];
+    //     $data = $response['data'];
+
+    //     // Login failed
+    //     if ($statusCode !== 200) {
+    //         return $this->errorResponse(
+    //             $data['message'] ?? 'Invalid email or password.',
+    //             $statusCode
+    //         );
+    //     }
+
+    //     // Login successful
+    //     $loginData = $data;
+
+    //     // Store authenticated user in PHP session
+    //     session()->set([
+    //         'isLoggedIn' => true,
+    //         'user' => $loginData['user'],
+    //         'token' => $loginData['token'],
+    //     ]);
+
+    //     return $this->successResponse(
+    //         [
+    //             'user' => $loginData['user'],
+    //             'token' => $loginData['token'],
+    //         ],
+    //         'Login successful.'
+    //     );
+    // }
 }
+

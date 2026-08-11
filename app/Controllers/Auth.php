@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controllers;
-
+use App\Services\ApiService;
 use App\Models\UserModel;
 use App\Models\StudentModel;
 class Auth extends BaseController
@@ -12,79 +12,85 @@ class Auth extends BaseController
     }
 
 
-
-    
-  public function authenticate()
+public function authenticate()
 {
-    // Validation Rules
+    // Validate request
     $rules = [
         'Email'    => 'required|valid_email|max_length[100]',
         'Password' => 'required|min_length[6]|max_length[255]'
     ];
 
-    // Validate Request
     if (!$this->validate($rules)) {
         return redirect()->back()
             ->withInput()
             ->with('errors', $this->validator->getErrors());
     }
 
-    // Get Form Data
+    // Get form data
     $email = trim($this->request->getPost('Email'));
     $password = $this->request->getPost('Password');
 
-    // Load User Model
-    $model = new UserModel();
+    try {
+ $apiService = new ApiService();
 
-    // Find User by Email
-    $user = $model->findByEmail($email);
+      
+        $response = $apiService->post(
+            'api/auth/login',
+            [
+                'email' => $email,
+                'password' => $password
+            ]
+        );
 
-    // User Not Found
-    if (!$user) {
-        return redirect()->back()
-            ->withInput()
-            ->with('error', 'Invalid email or password.');
-    }
-
-    // Check Account Status
-    if ($user['Status'] !== 'Active') {
-        return redirect()->back()
-            ->withInput()
-            ->with('error', 'Your account is inactive. Please contact the administrator.');
-    }
-
-    // Verify Password
-    if (!password_verify($password, $user['Password'])) {
-
-        // Increase Failed Login Attempts
-        $model->incrementFailedAttempts($user['UserID']);
+    } catch (\Throwable $e) {
 
         return redirect()->back()
             ->withInput()
-            ->with('error', 'Invalid email or password.');
+            ->with(
+                'error',
+                'Authentication service is unavailable.'
+            );
     }
 
-    // Reset Failed Attempts
-    $model->resetFailedAttempts($user['UserID']);
+    // API response
+    $statusCode = $response['statusCode'];
+    $data = $response['data'];
 
-    // Update Last Login Time
-    $model->updateLastLogin($user['UserID']);
+    // Login failed
+    if ($statusCode !== 200) {
 
-    // Regenerate Session ID (Security)
+        return redirect()->back()
+            ->withInput()
+            ->with(
+                'error',
+                $data['message'] ?? 'Invalid email or password.'
+            );
+    }
+
+    // Login successful
+    $user = $data['user'];
+    $token = $data['token'];
+
+    // Regenerate session ID
     session()->regenerate();
 
-    // Create User Session
+    // Store authenticated user
     session()->set([
-        'UserID'      => $user['UserID'],
-        'FullName'    => $user['FullName'],
-        'Email'       => $user['Email'],
-        'Role'        => $user['Role'],
-        'isLoggedIn'  => true
+        'isLoggedIn' => true,
+        'UserID'     => $user['userID'],
+        'FullName'   => $user['fullName'],
+        'Email'      => $user['email'],
+        'Role'       => $user['role'],
+        'Status'     => $user['status'],
+        'user'       => $user,
+        'token'      => $token
     ]);
 
-    // Redirect to Dashboard
+    // Redirect
     return redirect()->to('/dashboard');
 }
+
+
 
     public function logout()
     {

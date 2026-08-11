@@ -68,6 +68,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
             'Students::changeStatus/$1/$2'
         );
     });
+ 
 
     // ------------------------------------------------------------------------
     // Teachers

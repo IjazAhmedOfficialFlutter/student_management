@@ -268,7 +268,8 @@
     <?= lang('App.saveStudent') ?>
 </button>
 
-<a href="<?= site_url('students') ?>" class="btn btn-secondary">
+<a href="<?= site_url('students') ?>"  
+class="btn btn-secondary">
     <?= lang('App.back') ?>
 </a>
                     </form>

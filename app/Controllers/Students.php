@@ -4,52 +4,99 @@ namespace App\Controllers;
 
 use App\Models\StudentModel;
 use App\Models\ClassModel;
+use App\Services\ApiService;
 
 class Students extends BaseController
- {
+{
+    protected ApiService $apiService;
 
-
-
-
-
- 
-    public function index()
- {
-
- $model = new StudentModel();
-
-$search = trim($this->request->getGet('search'));
-
-if (!empty($search)) {
-
-    $model->groupStart()
-          ->like('StudentName', $search)
-          ->orLike('FatherName', $search)
-          ->orLike('RollNo', $search)
-           ->orLike('Email', $search)
-          ->groupEnd();
-
-}
-
-$data = [
-
-    'title' => 'Students',
-
-    'students' => $model
-        ->where('Status', 'Active')
-        ->paginate(8, 'students'),
-
-    'pager' => $model->pager,
-
-    'search' => $search
-
-];
-
-return view('students/index', $data);
-        
+    public function __construct()
+    {
+        $this->apiService = new ApiService();
     }
 
-    public function create()
+public function index()
+{
+    try {
+
+        $search = trim(
+            $this->request->getGet('search') ?? ''
+        );
+
+        $status = trim(
+            $this->request->getGet('status') ?? ''
+        );
+
+        /*
+         * Build API query parameters
+         */
+        $query = [];
+
+        if ($search !== '') {
+            $query['search'] = $search;
+        }
+
+        if ($status !== '') {
+            $query['status'] = $status;
+        }
+
+        /*
+         * Build API endpoint
+         */
+        $endpoint = 'api/students';
+
+        if (!empty($query)) {
+            $endpoint .= '?' . http_build_query($query);
+        }
+
+        /*
+         * Call ASP.NET API
+         */
+        $response = $this->apiService->get(
+            $endpoint,
+            true
+        );
+
+        /*
+         * API error
+         */
+        if ($response['statusCode'] !== 200) {
+
+            return view('students/index', [
+                'students' => [],
+                'search' => $search,
+                'status' => $status,
+                'error' => 'Unable to load students.'
+            ]);
+        }
+
+        /*
+         * API returned student array
+         */
+        $students = $response['data'] ?? [];
+
+        return view('students/index', [
+            'students' => $students,
+            'search' => $search,
+            'status' => $status
+        ]);
+
+    } catch (\Throwable $e) {
+
+        return view('students/index', [
+            'students' => [],
+            'search' => $this->request->getGet('search') ?? '',
+            'status' => $this->request->getGet('status') ?? '',
+            'error' => $e->getMessage()
+        ]);
+    }
+}
+
+
+
+
+
+public function create()
  {
         $classModel = new ClassModel();
 
@@ -63,62 +110,127 @@ return view('students/index', $data);
         return view( 'students/create', $data );
     }
 
-    public function store()
- {
-        $validation = \Config\Services::validation();
+ public function store()
+{
+    try {
 
-        $rules = $this->studentRules();
-
-        if ( ! $this->validate( $this->studentRules() ) ) {
+        /*
+         * Validate form
+         */
+        if (!$this->validate($this->studentRules())) {
 
             return redirect()
-            ->back()
-            ->withInput();
+                ->back()
+                ->withInput();
         }
-        $photo = $this->request->getFile( 'Photo' );
+
+        /*
+         * Handle photo
+         */
+        $photo = $this->request->getFile('Photo');
 
         $photoName = null;
 
-        if ( $photo && $photo->isValid() && !$photo->hasMoved() ) {
+        if ($photo && $photo->isValid() && !$photo->hasMoved()) {
 
             $photoName = $photo->getRandomName();
 
-            $photo->move( FCPATH . 'uploads/students', $photoName );
+            $photo->move(
+                FCPATH . 'uploads/students',
+                $photoName
+            );
         }
 
-        $model = new StudentModel();
+        /*
+         * Build API request data
+         */
+        $data = [
 
-        $model->save( [
+            'rollNo' => $this->request->getPost('RollNo'),
 
-            'RollNo' => $this->request->getPost( 'RollNo' ),
+            'studentName' =>
+                $this->request->getPost('StudentName'),
 
-            'StudentName' => $this->request->getPost( 'StudentName' ),
+            'fatherName' =>
+                $this->request->getPost('FatherName'),
 
-            'FatherName' => $this->request->getPost( 'FatherName' ),
+            'email' =>
+                $this->request->getPost('Email'),
 
-            'Email' => $this->request->getPost( 'Email' ),
+            'phone' =>
+                $this->request->getPost('Phone'),
 
-            'Phone' => $this->request->getPost( 'Phone' ),
+            'gender' =>
+                $this->request->getPost('Gender'),
 
-            'Gender' => $this->request->getPost( 'Gender' ),
+            'dob' =>
+                $this->request->getPost('DOB'),
 
-            'DOB' => $this->request->getPost( 'DOB' ),
+            'address' =>
+                $this->request->getPost('Address'),
 
-            'Address' => $this->request->getPost( 'Address' ),
+            'classID' =>
+                (int) $this->request->getPost('ClassID'),
 
-            'ClassID' => $this->request->getPost( 'ClassID' ),
-            'Section' => trim( $this->request->getPost( 'Section' ) ),
-            'CNIC' => $this->request->getPost( 'CNIC' ),
-            'Photo' => $photoName
+            'section' =>
+                trim(
+                    $this->request->getPost('Section')
+                ),
 
-        ] );
+            'cnic' =>
+                $this->request->getPost('CNIC'),
 
-return redirect()
-    ->to('/students')
-    ->with('success', lang('App.studentAddedSuccessfully'));
-    
+            'photo' =>
+                $photoName,
+
+    'status' => 'Active'
+                
+        ];
+
+
+
+  $response = $this->apiService->post(
+            'api/students',
+            $data,
+            true
+        );
+
+        if (
+            $response['statusCode'] < 200 ||
+            $response['statusCode'] >= 300
+        ) {
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with(
+                    'error',
+                    $response['data']['message']
+                        ?? 'Unable to create student.'
+                );
+        }
+
+        /*
+         * Success
+         */
+        return redirect()
+            ->to('/students')
+            ->with(
+                'success',
+                lang('App.studentAddedSuccessfully')
+            );
+
+    } catch (\Throwable $e) {
+
+        return redirect()
+            ->back()
+            ->withInput()
+            ->with(
+                'error',
+                $e->getMessage()
+            );
     }
-
+}
 
 
     public function getRecentStudents($limit = 5)
@@ -328,25 +440,83 @@ private function studentRules($id = null)
         ],
     ];
 }
+
 public function archiveStudent($id)
 {
-    $model = new StudentModel();
+    try {
 
-    $student = $model->find($id);
+        log_message(
+            'debug',
+            '========== ARCHIVE STUDENT =========='
+        );
 
-    if (!$student) {
-        return redirect()->to('/students')
-->with('error', lang('App.studentNotFound')); 
+        log_message(
+            'debug',
+            'Student ID received: ' . $id
+        );
 
+       
+        $response = $this->apiService->patch(
+            'api/students/' . $id . '/archive',
+            [],
+            true
+        );
+
+        log_message(
+            'debug',
+            'API Status Code: ' . $response['statusCode']
+        );
+
+        log_message(
+            'debug',
+            'API Response: ' .
+            json_encode($response['data'])
+        );
+
+        /*
+         * API failed
+         */
+        if (
+            $response['statusCode'] < 200 ||
+            $response['statusCode'] >= 300
+        ) {
+
+            return redirect()
+                ->to('/students')
+                ->with(
+                    'error',
+                    $response['data']['message']
+                        ?? 'Unable to archive student.'
+                );
+        }
+
+        /*
+         * API success
+         */
+        return redirect()
+            ->to('/students')
+            ->with(
+                'success',
+                lang('App.studentArchivedSuccessfully')
+            );
+
+    } catch (\Throwable $e) {
+
+        log_message(
+            'error',
+            'Archive API Error: ' . $e->getMessage()
+        );
+
+        return redirect()
+            ->to('/students')
+            ->with(
+                'error',
+                $e->getMessage()
+            );
     }
-
-    $model->update($id, [
-        'Status' => 'Inactive'
-    ]);
-
- return redirect()->to('/students')
-    ->with('success', lang('App.studentArchivedSuccessfully'));
 }
+
+
  
 
 }

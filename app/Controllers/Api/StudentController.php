@@ -84,59 +84,57 @@ public function create()
 }
 public function update($id)
 {
-    // Check student exists
-    $student = $this->studentModel->find($id);
+    $apiService = new \App\Services\ApiService();
 
-    if (!$student) {
-        return $this->notFound('Student not found.');
-    }
-
-    // Get PUT request data
-    $input = $this->request->getRawInput();
-
-    // Validation Rules
-    $rules = [
-        'RollNo'      => "required|alpha_numeric_punct|min_length[1]|max_length[20]|is_unique[Students.RollNo,StudentID,{$id}]",
-        'StudentName' => 'required|min_length[3]|max_length[100]|multiLang',
-        'FatherName'  => 'required|min_length[3]|max_length[100]|multiLang',
-        'Email'       => 'required|valid_email|max_length[100]',
-        'Phone'       => 'required|numeric|exact_length[11]',
-        'Gender'      => 'required|in_list[Male,Female]',
-        'DOB'         => 'required|valid_date',
-        'ClassID'     => 'required|integer',
-        'Section'     => 'required|in_list[Section A,Section B,Section C]',
-        'Address'     => 'permit_empty|max_length[255]|multiLang',
-        'CNIC'        => 'required|regex_match[/^[0-9]{5}-[0-9]{7}-[0-9]$/]',
-    ];
-
-    // Validate PUT data
-    if (!$this->validateData($input, $rules)) {
-        return $this->validationError($this->validator->getErrors());
-    }
-
-    // Updated Data
+    /*
+     * Get form data
+     */
     $data = [
-        'RollNo'      => $input['RollNo'],
-        'StudentName' => $input['StudentName'],
-        'FatherName'  => $input['FatherName'],
-        'Email'       => $input['Email'],
-        'Phone'       => $input['Phone'],
-        'Gender'      => $input['Gender'],
-        'DOB'         => $input['DOB'],
-        'Address'     => $input['Address'] ?? '',
-        'ClassID'     => $input['ClassID'],
-        'Section'     => trim($input['Section']),
-        'CNIC'        => $input['CNIC'],
+        'rollNo'      => $this->request->getPost('RollNo'),
+        'studentName' => $this->request->getPost('StudentName'),
+        'fatherName'  => $this->request->getPost('FatherName'),
+        'email'       => $this->request->getPost('Email'),
+        'phone'       => $this->request->getPost('Phone'),
+        'gender'      => $this->request->getPost('Gender'),
+        'dob'         => $this->request->getPost('DOB'),
+        'address'     => $this->request->getPost('Address') ?? '',
+        'classID'     => (int) $this->request->getPost('ClassID'),
+        'section'     => trim(
+            $this->request->getPost('Section')
+        ),
+        'cnic'        => $this->request->getPost('CNIC'),
     ];
 
-    $this->studentModel->update($id, $data);
-
-    $student = $this->studentModel->find($id);
-
-    return $this->successResponse(
-        $student,
-        'Student updated successfully.'
+   
+    $response = $apiService->put(
+        'api/students/' . $id,
+        $data,
+        true
     );
+
+  
+    if (
+        $response['statusCode'] !== 200 &&
+        $response['statusCode'] !== 204
+    ) {
+        return redirect()
+            ->back()
+            ->withInput()
+            ->with(
+                'error',
+                'Unable to update student.'
+            );
+    }
+
+    /*
+     * Update successful
+     */
+    return redirect()
+        ->to('/students')
+        ->with(
+            'success',
+            'Student updated successfully.'
+        );
 }
 
 public function delete($id)

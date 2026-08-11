@@ -8,13 +8,21 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class AuthFilter implements FilterInterface
 {
-    public function before(RequestInterface $request, $arguments = null)
+
+public function before(RequestInterface $request, $arguments = null)
     {
         if (!session()->get('isLoggedIn')) {
             return redirect()->to('/login')
                 ->with('error', 'Please login first.');
         }
     }
+  // public function before(RequestInterface $request, $arguments = null)
+    // {
+    //     if (!session()->get('isLoggedIn')) {
+    //         return redirect()->to('/login')
+    //             ->with('error', 'Please login first.');
+    //     }
+    // }
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
