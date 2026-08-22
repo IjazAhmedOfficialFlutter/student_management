@@ -14,21 +14,21 @@
 
             <thead>
 
-            <tr>
+                <tr>
 
-                <th>Photo</th>
-                <th>Roll No</th>
-                <th>Name</th>
-                <th>Class</th>
-                <th>Created</th>
+                    <th>Photo</th>
+                    <th>Roll No</th>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th>Created</th>
 
-            </tr>
+                </tr>
 
             </thead>
 
             <tbody>
 
-            <?php foreach ($recentStudents as $student): ?>
+                <?php foreach ($recentStudents as $student): ?>
 
                 <tr>
 
@@ -36,14 +36,12 @@
 
                         <?php if ($student['Photo']) : ?>
 
-                            <img
-                                src="<?= base_url('uploads/students/'.$student['Photo']) ?>"
-                                width="40"
-                                class="rounded-circle">
+                        <img src="<?= base_url('uploads/students/'.$student['Photo']) ?>" width="40"
+                            class="rounded-circle">
 
                         <?php else: ?>
 
-                            -
+                        -
 
                         <?php endif; ?>
 
@@ -56,14 +54,12 @@
                     <td><?= esc($student['ClassName']) ?></td>
 
                     <td>
-
                         <?= date('d M Y', strtotime($student['CreatedAt'])) ?>
-
                     </td>
 
                 </tr>
 
-            <?php endforeach; ?>
+                <?php endforeach; ?>?>
 
             </tbody>
 

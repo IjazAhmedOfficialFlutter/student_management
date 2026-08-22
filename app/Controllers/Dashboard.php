@@ -3,10 +3,11 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
-use App\Models\StudentModel;
 use App\Models\ClassModel;
 use App\Models\SubjectModel;
 use App\Models\TeacherModel;
+use App\Services\ApiService;
+
 class Dashboard extends BaseController
 {
 
@@ -16,56 +17,99 @@ public function index()
         return redirect()->to('/login');
     }
 
-    $studentModel = new StudentModel();
     $teacherModel = new TeacherModel();
     $classModel   = new ClassModel();
     $subjectModel = new SubjectModel();
     $userModel    = new UserModel();
+    $apiService   = new ApiService();
+
+    $totalStudents = 0;
+    $recentStudents = [];
+
+    try {
+
+        $response = $apiService->get(
+            'api/students?status=Active',
+            true
+        );
+
+        if (
+            $response['statusCode'] === 200 &&
+            is_array($response['data'])
+        ) {
+            $totalStudents = count($response['data']);
+        }
+
+    } catch (\Throwable $e) {
+
+        log_message(
+            'error',
+            'Dashboard students API error: ' . $e->getMessage()
+        );
+    }
+
+    try {
+
+        $response = $apiService->get(
+            'api/students/recent',
+            true
+        );
+
+        if (
+            $response['statusCode'] === 200 &&
+            is_array($response['data'])
+        ) {
+
+            foreach ($response['data'] as $student) {
+
+                $recentStudents[] = [
+                    'StudentID'   => $student['studentID'] ?? null,
+                    'RollNo'      => $student['rollNo'] ?? null,
+                    'StudentName' => $student['studentName'] ?? null,
+                    'Photo'       => $student['photo'] ?? null,
+                    'ClassName'   => $student['className'] ?? null,
+                    'CreatedAt'   => $student['createdAt'] ?? null,
+                ];
+            }
+        }
+
+    } catch (\Throwable $e) {
+
+        log_message(
+            'error',
+            'Dashboard recent students API error: ' . $e->getMessage()
+        );
+    }
 
     $data = [
 
         'title' => 'Dashboard',
 
-        // Student Statistics
-        'totalStudents' => $studentModel
-                                ->where('Status', 'Active')
-                                ->countAllResults(),
+        'totalStudents' => $totalStudents,
 
-        // Teacher Statistics
         'totalTeachers' => $teacherModel
-                                ->where('Status', 'Active')
-                                ->countAllResults(),
+            ->where('Status', 'Active')
+            ->countAllResults(),
 
         'activeTeachers' => $teacherModel
-                                ->where('Status', 'Active')
-                                ->countAllResults(),
+            ->where('Status', 'Active')
+            ->countAllResults(),
 
         'archivedTeachers' => $teacherModel
-                                ->where('Status', 'Archived')
-                                ->countAllResults(),
+            ->where('Status', 'Archived')
+            ->countAllResults(),
 
-        // Other Statistics
-        'totalClasses'  => $classModel->countAll(),
+        'totalClasses' => $classModel->countAll(),
 
         'totalSubjects' => $subjectModel->countAll(),
 
-        'totalUsers'    => $userModel->countAll(),
+        'totalUsers' => $userModel->countAll(),
 
-        // Recent Students
-        'recentStudents' => $studentModel
-            ->select('Students.StudentID,
-                      Students.StudentName,
-                      Students.RollNo,
-                      Students.Photo,
-                      Students.CreatedAt,
-                      Classes.ClassName')
-            ->join('Classes', 'Classes.ClassID = Students.ClassID', 'left')
-            ->where('Students.Status', 'Active')
-            ->orderBy('Students.CreatedAt', 'DESC')
-            ->findAll(5),
+        'recentStudents' => $recentStudents,
     ];
 
     return view('dashboard/index', $data);
 }
-  
+
 }
+

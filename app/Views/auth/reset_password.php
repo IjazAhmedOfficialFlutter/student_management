@@ -9,66 +9,90 @@
 
     <title>Reset Password | Student Management System</title>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
 
     <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        rel="stylesheet"
+    >
 
     <style>
 
-        body{
+        body {
+            background: #f4f6f9;
+            min-height: 100vh;
 
-            background:#f4f6f9;
-
-            height:100vh;
-
-            display:flex;
-
-            justify-content:center;
-
-            align-items:center;
-
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .login-card{
+        .reset-card {
 
-            width:450px;
+            width: 420px;
 
-            border:none;
+            border: none;
 
-            border-radius:15px;
+            border-radius: 15px;
 
-            box-shadow:0 10px 25px rgba(0,0,0,.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .1);
 
+            overflow: hidden;
         }
 
-        .card-header{
+        .card-header {
 
-            background:#0d6efd;
+            background: #0d6efd;
 
-            color:#fff;
+            color: white;
 
-            text-align:center;
+            text-align: center;
 
-            font-size:24px;
+            font-size: 23px;
 
-            font-weight:bold;
+            font-weight: bold;
 
-            padding:20px;
-
+            padding: 20px;
         }
 
-        .form-control{
+        .card-header i {
 
-            border-radius:10px;
+            font-size: 30px;
 
+            display: block;
+
+            margin-bottom: 5px;
         }
 
-        .btn{
+        .form-control {
 
-            border-radius:10px;
+            border-radius: 10px;
 
+            padding: 11px;
+        }
+
+        .btn {
+
+            border-radius: 10px;
+
+            padding: 11px;
+        }
+
+        .alert {
+
+            border-radius: 10px;
+        }
+
+        .password-info {
+
+            font-size: 13px;
+
+            color: #6c757d;
         }
 
     </style>
@@ -77,115 +101,246 @@
 
 <body>
 
-<div class="card login-card">
+
+<div class="card reset-card">
+
+
+    <!-- Header -->
 
     <div class="card-header">
 
-        <i class="bi bi-key-fill"></i>
+        <i class="bi bi-shield-lock-fill"></i>
 
         Reset Password
 
     </div>
 
+
     <div class="card-body p-4">
 
-        <h5 class="text-center mb-4">
 
-            <?= esc($user['FullName']) ?>
+        <h4 class="text-center mb-2">
 
-        </h5>
+            Create New Password
 
-        <?php if(session()->getFlashdata('errors')): ?>
+        </h4>
 
-            <div class="alert alert-danger">
 
-                <ul class="mb-0">
+        <p class="text-center text-muted mb-4">
 
-                    <?php foreach(session()->getFlashdata('errors') as $error): ?>
+            Enter your new password below.
 
-                        <li><?= esc($error) ?></li>
+        </p>
 
-                    <?php endforeach; ?>
 
-                </ul>
+        <!-- Error -->
 
-            </div>
+        <?php if (session()->getFlashdata('error')) : ?>
 
-        <?php endif; ?>
+            <div class="alert alert-danger d-flex align-items-center">
 
-        <?php if(session()->getFlashdata('error')): ?>
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
 
-            <div class="alert alert-danger">
+                <div>
 
-                <?= session()->getFlashdata('error') ?>
+                    <?= esc(session()->getFlashdata('error')) ?>
 
-            </div>
-
-        <?php endif; ?>
-
-        <?php if(session()->getFlashdata('success')): ?>
-
-            <div class="alert alert-success">
-
-                <?= session()->getFlashdata('success') ?>
+                </div>
 
             </div>
 
         <?php endif; ?>
 
-<form action="<?= site_url('auth/update-password/'.$user['UserID']) ?>" method="post">
-            <?= csrf_field(); ?>
+
+        <!-- Success -->
+
+        <?php if (session()->getFlashdata('success')) : ?>
+
+            <div class="alert alert-success d-flex align-items-center">
+
+                <i class="bi bi-check-circle-fill me-2"></i>
+
+                <div>
+
+                    <?= esc(session()->getFlashdata('success')) ?>
+
+                </div>
+
+            </div>
+
+        <?php endif; ?>
+
+
+        <form
+            method="post"
+            action="<?= site_url('reset-password') ?>"
+        >
+
+            <?= csrf_field() ?>
+
+
+            <!-- Token -->
+
+            <input
+                type="hidden"
+                name="token"
+                value="<?= esc($token) ?>"
+            >
+
+
+            <!-- New Password -->
 
             <div class="mb-3">
 
-                <label class="form-label">New Password</label>
+                <label class="form-label">
 
-                <input
-                    type="password"
-                    name="Password"
-                    class="form-control"
-                    placeholder="Enter New Password"
-                    required>
+                    New Password
+
+                </label>
+
+                <div class="input-group">
+
+                    <input
+                        type="password"
+                        name="newPassword"
+                        id="newPassword"
+                        class="form-control"
+                        placeholder="Enter new password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="btn btn-outline-secondary"
+                        onclick="togglePassword('newPassword', this)"
+                    >
+
+                        <i class="bi bi-eye"></i>
+
+                    </button>
+
+                </div>
 
             </div>
 
-            <div class="mb-4">
 
-                <label class="form-label">Confirm Password</label>
+            <!-- Confirm Password -->
 
-                <input
-                    type="password"
-                    name="ConfirmPassword"
-                    class="form-control"
-                    placeholder="Confirm Password"
-                    required>
+            <div class="mb-3">
+
+                <label class="form-label">
+
+                    Confirm Password
+
+                </label>
+
+                <div class="input-group">
+
+                    <input
+                        type="password"
+                        name="confirmPassword"
+                        id="confirmPassword"
+                        class="form-control"
+                        placeholder="Confirm new password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="btn btn-outline-secondary"
+                        onclick="togglePassword('confirmPassword', this)"
+                    >
+
+                        <i class="bi bi-eye"></i>
+
+                    </button>
+
+                </div>
 
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">
 
-                <i class="bi bi-key-fill"></i>
+            <div class="password-info mb-4">
+
+                <i class="bi bi-info-circle"></i>
+
+                Use a strong password containing letters,
+                numbers and special characters.
+
+            </div>
+
+
+            <!-- Submit -->
+
+            <button
+                type="submit"
+                class="btn btn-primary w-100"
+            >
+
+                <i class="bi bi-key-fill me-1"></i>
 
                 Reset Password
 
             </button>
 
-            <a href="<?= site_url('dashboard') ?>"
-               class="btn btn-secondary w-100 mt-2">
+
+        </form>
+
+
+        <div class="text-center mt-4">
+
+            <a
+                href="<?= site_url('login') ?>"
+                class="text-decoration-none"
+            >
 
                 <i class="bi bi-arrow-left"></i>
 
-                Back
+                Back to Login
 
             </a>
 
-        </form>
+        </div>
+
 
     </div>
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+function togglePassword(inputId, button)
+{
+    const input = document.getElementById(inputId);
+
+    const icon = button.querySelector('i');
+
+    if (input.type === 'password') {
+
+        input.type = 'text';
+
+        icon.classList.remove('bi-eye');
+
+        icon.classList.add('bi-eye-slash');
+
+    } else {
+
+        input.type = 'password';
+
+        icon.classList.remove('bi-eye-slash');
+
+        icon.classList.add('bi-eye');
+
+    }
+}
+
+</script>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js">
+</script>
 
 </body>
 

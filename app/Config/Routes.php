@@ -15,9 +15,32 @@ $routes->get('login', 'Auth::login');
 $routes->post('login/authenticate', 'Auth::authenticate');
 $routes->get('logout', 'Auth::logout');
 
-// Language
-$routes->get('language/(:segment)', 'LanguageController::change/$1');
 
+
+$routes->get(
+    'forgot-password',
+    'PasswordResetController::forgotPassword'
+);
+
+$routes->post(
+    'forgot-password',
+    'PasswordResetController::sendResetLink'
+);
+
+$routes->get(
+    'language/(:segment)',
+    'LanguageController::change/$1'
+);
+
+$routes->get(
+    'reset-password',
+    'PasswordResetController::resetPassword'
+);
+
+$routes->post(
+    'reset-password',
+    'PasswordResetController::updatePassword'
+);
 // ============================================================================
 // Development / Testing
 // ============================================================================
@@ -56,7 +79,6 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
         $routes->get('edit/(:num)', 'Students::edit/$1');
         $routes->post('update/(:num)', 'Students::update/$1');
-
         $routes->get('archive', 'Students::archive');
         $routes->get('archiveStudent/(:num)', 'Students::archiveStudent/$1');
         $routes->get('restore/(:num)', 'Students::restore/$1');
@@ -180,12 +202,7 @@ $routes->get('show/(:num)', 'Subjects::show/$1');
         $routes->get('students/detail/(:num)', 'Reports::student/$1');
     });
 
-    // ------------------------------------------------------------------------
-    // Reset Password
-    // ------------------------------------------------------------------------
-
-    $routes->get('reset-password/(:num)', 'Auth::resetPassword/$1');
-    $routes->post('auth/update-password/(:num)', 'Auth::updatePassword/$1');
+   
 
 });
 

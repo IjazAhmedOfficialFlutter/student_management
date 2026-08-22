@@ -6,19 +6,21 @@ use CodeIgniter\Config\BaseConfig;
 
 class App extends BaseConfig
 {
-    /**
-     * --------------------------------------------------------------------------
-     * Base Site URL
-     * --------------------------------------------------------------------------
-     *
-     * URL to your CodeIgniter root. Typically, this will be your base URL,
-     * WITH a trailing slash:
-     *
-     * E.g., http://example.com/
-     */
+
+     
   public string $baseURL = 'http://localhost/student_management/public/';
 
 public string $apiBaseURL = 'http://localhost:5104/';
+
+   public string $apiKey = '';
+
+    public function __construct()
+    {
+        // $this->apiKey = env('apiKey', '');
+
+        parent::__construct();
+    }
+
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.
      * If you want to accept multiple Hostnames, set this.

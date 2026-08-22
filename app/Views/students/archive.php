@@ -4,75 +4,96 @@
 
 <div class="container-fluid">
 
-    <!-- Page Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
 
-        <div>
-            <h2 class="fw-bold mb-1">
-                <i class="bi bi-archive-fill text-warning me-2"></i>
-                <?= lang('App.archivedStudents') ?>
-            </h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-            <p class="text-muted mb-0">
-                <?= lang('App.archivedStudentsDescription') ?>
-            </p>
-        </div>
+    <div>
 
-        <a href="<?= site_url('students') ?>"
-           class="btn btn-secondary rounded-pill px-4">
-            <i class="bi bi-arrow-left-circle me-2"></i>
-            <?= lang('App.backToStudents') ?>
-        </a>
+        <h2 class="fw-bold mb-1">
+
+            <i class="bi bi-archive-fill text-warning me-2"></i>
+
+            <?= lang('App.archivedStudents') ?>
+
+        </h2>
+
+        <p class="text-muted mb-0">
+
+            <?= lang('App.archivedStudentsDescription') ?>
+
+        </p>
 
     </div>
 
-    <!-- Information Card -->
-    <div class="card border-0 shadow-sm mb-4">
+    <a href="<?= site_url('students') ?>"
+       class="btn btn-secondary rounded-pill px-4">
 
-        <div class="card-body">
+        <i class="bi bi-arrow-left-circle me-2"></i>
 
-            <div class="d-flex align-items-start">
+        <?= lang('App.backToStudents') ?>
 
-                <div class="me-3">
+    </a>
 
-                    <div class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
-                         style="width:55px;height:55px;">
+</div>
 
-                        <i class="bi bi-info-circle-fill text-warning fs-3"></i>
 
-                    </div>
+<div class="card border-0 shadow-sm mb-4">
 
-                </div>
+    <div class="card-body">
 
-                <div>
+        <div class="d-flex align-items-start">
 
-                    <h5 class="fw-semibold mb-2">
-                        <?= lang('App.note') ?>
-                    </h5>
+            <div class="me-3">
 
-                    <p class="text-muted mb-0">
-                        <?= lang('App.archivedStudentsInfo') ?>
-                    </p>
+                <div class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:55px;height:55px;">
+
+                    <i class="bi bi-info-circle-fill text-warning fs-3"></i>
 
                 </div>
+
+            </div>
+
+            <div>
+
+                <h5 class="fw-semibold mb-2">
+
+                    <?= lang('App.note') ?>
+
+                </h5>
+
+                <p class="text-muted mb-0">
+
+                    <?= lang('App.archivedStudentsInfo') ?>
+
+                </p>
 
             </div>
 
         </div>
 
     </div>
-<!-- Archived Students Table -->
+
+</div>
+
 <div class="card shadow-sm border-0 rounded-4">
 
     <div class="card-header bg-white d-flex justify-content-between align-items-center">
 
         <h5 class="mb-0">
+
             <i class="bi bi-archive-fill text-warning me-2"></i>
+
             <?= lang('App.archivedStudents') ?>
+
         </h5>
 
         <span class="badge bg-warning text-dark">
-            <?= count($students) ?> <?= lang('App.students') ?>
+
+            <?= count($students) ?>
+
+            <?= lang('App.students') ?>
+
         </span>
 
     </div>
@@ -83,93 +104,127 @@
 
             <thead class="table-light">
 
-                <tr>
+            <tr>
 
-                    <th><?= lang('App.photo') ?></th>
-                    <th><?= lang('App.rollNo') ?></th>
-                    <th><?= lang('App.studentName') ?></th>
-                    <th><?= lang('App.fatherName') ?></th>
-                    <th><?= lang('App.class') ?></th>
-                    <th><?= lang('App.phone') ?></th>
-                    <th><?= lang('App.cnic') ?></th>
-                    <th><?= lang('App.status') ?></th>
-                    <th width="170"><?= lang('App.action') ?></th>
+                <th><?= lang('App.photo') ?></th>
+                <th><?= lang('App.rollNo') ?></th>
+                <th><?= lang('App.studentName') ?></th>
+                <th><?= lang('App.fatherName') ?></th>
+                <th><?= lang('App.class') ?></th>
+                <th><?= lang('App.phone') ?></th>
+                <th><?= lang('App.cnic') ?></th>
+                <th><?= lang('App.status') ?></th>
+                <th width="170"><?= lang('App.action') ?></th>
 
-                </tr>
+            </tr>
 
             </thead>
 
             <tbody>
 
-            <?php if(!empty($students)): ?>
+            <?php if (!empty($students)): ?>
 
-                <?php foreach($students as $student): ?>
+                <?php foreach ($students as $student): ?>
 
-                <tr>
+                    <tr>
 
-                    <td width="70">
+                        <td width="70">
 
-                        <?php if(!empty($student['Photo'])): ?>
+                            <?php if (!empty($student['Photo'])): ?>
 
-                            <img src="<?= base_url('uploads/students/'.$student['Photo']) ?>"
-                                 class="rounded-circle border"
-                                 width="50"
-                                 height="50"
-                                 style="object-fit:cover;">
+                                <img
+                                    src="<?= base_url('uploads/students/' . $student['Photo']) ?>"
+                                    class="rounded-circle border"
+                                    width="50"
+                                    height="50"
+                                    style="object-fit:cover;">
 
-                        <?php else: ?>
+                            <?php else: ?>
 
-                            <img src="https://ui-avatars.com/api/?name=<?= urlencode($student['StudentName']) ?>&background=6c757d&color=fff"
-                                 class="rounded-circle"
-                                 width="50">
+                                <img
+                                    src="<?= base_url('uploads/students/default.png') ?>"
+                                    class="rounded-circle border"
+                                    width="50"
+                                    height="50">
 
-                        <?php endif; ?>
+                            <?php endif; ?>
 
-                    </td>
+                        </td>
 
-                    <td>
-                        <span class="badge bg-primary">
-                            <?= esc($student['RollNo']) ?>
-                        </span>
-                    </td>
+                        <td>
 
-                    <td>
-                        <strong><?= esc($student['StudentName']) ?></strong>
-                    </td>
+                            <span class="badge bg-primary">
 
-                    <td><?= esc($student['FatherName']) ?></td>
+                                <?= esc($student['RollNo']) ?>
 
-                    <td>
-                        <span class="badge bg-info">
-                            <?= esc($student['ClassName']) ?>
-                        </span>
-                    </td>
+                            </span>
 
-                    <td><?= esc($student['Phone']) ?></td>
+                        </td>
 
-                    <td><?= esc($student['CNIC']) ?></td>
+                        <td>
 
-                    <td>
-                        <span class="badge bg-warning text-dark">
-                            <?= lang('App.archived') ?>
-                        </span>
-                    </td>
+                            <strong>
 
-                    <td>
+                                <?= esc($student['StudentName']) ?>
 
-                  <button
-    class="btn btn-success btn-sm restoreBtn"
-    data-id="<?= $student['StudentID'] ?>"
-    data-name="<?= esc($student['StudentName']) ?>">
+                            </strong>
 
-    <i class="bi bi-arrow-counterclockwise"></i>
-    <?= lang('App.restore') ?>
+                        </td>
 
-</button>
+                        <td>
 
-                    </td>
+                            <?= esc($student['FatherName']) ?>
 
-                </tr>
+                        </td>
+
+                        <td>
+
+                            <span class="badge bg-info">
+
+                                <?= esc($student['ClassName']) ?>
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <?= esc($student['Phone']) ?>
+
+                        </td>
+
+                        <td>
+
+                            <?= esc($student['CNIC']) ?>
+
+                        </td>
+
+                        <td>
+
+                            <span class="badge bg-warning text-dark">
+
+                                <?= lang('App.archived') ?>
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn btn-success btn-sm restoreBtn"
+                                data-id="<?= $student['StudentID'] ?>"
+                                data-name="<?= esc($student['StudentName']) ?>">
+
+                                <i class="bi bi-arrow-counterclockwise"></i>
+
+                                <?= lang('App.restore') ?>
+
+                            </button>
+
+                        </td>
+
+                    </tr>
 
                 <?php endforeach; ?>
 
@@ -182,7 +237,9 @@
                         <i class="bi bi-archive fs-1 text-secondary"></i>
 
                         <h5 class="mt-3">
+
                             <?= lang('App.noArchivedStudents') ?>
+
                         </h5>
 
                     </td>
@@ -199,6 +256,7 @@
 
 </div>
 
+
 </div>
 
 <script>
@@ -207,19 +265,15 @@ document.querySelectorAll('.restoreBtn').forEach(function(btn){
 
     btn.addEventListener('click', function(){
 
-        let id   = this.dataset.id;
-        let name = this.dataset.name;
-
-        document.getElementById('restoreStudentName').innerText = name;
+        document.getElementById('restoreStudentName').innerText =
+            this.dataset.name;
 
         document.getElementById('restoreLink').href =
-            "<?= site_url('students/restore/') ?>" + id;
+            "<?= site_url('students/restore/') ?>" + this.dataset.id;
 
-        let modal = new bootstrap.Modal(
+        new bootstrap.Modal(
             document.getElementById('restoreModal')
-        );
-
-        modal.show();
+        ).show();
 
     });
 
@@ -227,70 +281,79 @@ document.querySelectorAll('.restoreBtn').forEach(function(btn){
 
 </script>
 
+
+
 <div class="modal fade" id="restoreModal" tabindex="-1">
 
-    <div class="modal-dialog">
+<div class="modal-dialog">
 
-        <div class="modal-content">
+    <div class="modal-content">
 
-            <div class="modal-header bg-success text-white">
+        <div class="modal-header bg-success text-white">
 
-                <h5 class="modal-title">
-                    <i class="bi bi-arrow-counterclockwise me-2"></i>
-                    <?= lang('App.restoreStudent') ?>
-                </h5>
+            <h5 class="modal-title">
 
-                <button type="button"
-                        class="btn-close btn-close-white"
-                        data-bs-dismiss="modal">
-                </button>
+                <i class="bi bi-arrow-counterclockwise me-2"></i>
 
-            </div>
+                <?= lang('App.restoreStudent') ?>
 
-            <div class="modal-body">
+            </h5>
 
-                <p>
+            <button
+                type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal">
+            </button>
 
-                    <?= lang('App.restoreConfirmation') ?>
+        </div>
 
-                    <strong id="restoreStudentName"></strong> ?
+        <div class="modal-body">
 
-                </p>
+            <p>
 
-                <div class="alert alert-success mb-0">
+                <?= lang('App.restoreConfirmation') ?>
 
-                    <i class="bi bi-info-circle-fill me-2"></i>
+                <strong id="restoreStudentName"></strong> ?
 
-                    <?= lang('App.restoreWarning') ?>
+            </p>
 
-                </div>
+            <div class="alert alert-success mb-0">
 
-            </div>
+                <i class="bi bi-info-circle-fill me-2"></i>
 
-            <div class="modal-footer">
-
-                <button class="btn btn-secondary"
-                        data-bs-dismiss="modal">
-
-                    <?= lang('App.cancel') ?>
-
-                </button>
-
-                <a href=""
-                   id="restoreLink"
-                   class="btn btn-success">
-
-                    <i class="bi bi-arrow-counterclockwise"></i>
-
-                    <?= lang('App.restore') ?>
-
-                </a>
+                <?= lang('App.restoreWarning') ?>
 
             </div>
 
         </div>
 
+        <div class="modal-footer">
+
+            <button
+                class="btn btn-secondary"
+                data-bs-dismiss="modal">
+
+                <?= lang('App.cancel') ?>
+
+            </button>
+
+            <a
+                href=""
+                id="restoreLink"
+                class="btn btn-success">
+
+                <i class="bi bi-arrow-counterclockwise"></i>
+
+                <?= lang('App.restore') ?>
+
+            </a>
+
+        </div>
+
     </div>
+
+</div>
+
 
 </div>
 

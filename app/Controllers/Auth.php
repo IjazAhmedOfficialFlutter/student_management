@@ -42,7 +42,8 @@ public function authenticate()
             ]
         );
 
-    } catch (\Throwable $e) {
+    } 
+    catch (\Throwable $e) {
 
         return redirect()->back()
             ->withInput()

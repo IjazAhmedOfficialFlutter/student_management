@@ -129,27 +129,40 @@
                 >
 
             </div>
+<div class="mb-4">
 
-            <div class="mb-4">
+    <label>Password</label>
 
-                <label>Password</label>
+    <input
+        type="password"
+        name="Password"
+        class="form-control"
+        placeholder="Enter Password"
+    >
 
-                <input
-                    type="password"
-                    name="Password"
-                    class="form-control"
-                    placeholder="Enter Password"
-                >
+</div>
 
-            </div>
+<div class="text-end mb-4">
 
-            <button class="btn btn-primary w-100">
+    <a
+        href="<?= site_url('forgot-password') ?>"
+        class="text-decoration-none"
+    >
+        <i class="bi bi-question-circle"></i>
+        Forgot Password?
+    </a>
 
-                <i class="bi bi-box-arrow-in-right"></i>
+</div>
 
-                Login
 
-            </button>
+<button class="btn btn-primary w-100">
+
+    <i class="bi bi-box-arrow-in-right"></i>
+
+    Login
+
+</button>
+          
 
         </form>
 

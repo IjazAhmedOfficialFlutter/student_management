@@ -250,121 +250,251 @@ public function create()
         ->findAll($limit);
 }
 
-    public function edit( $id )
- {
-        $studentModel = new StudentModel();
-        $classModel   = new ClassModel();
+public function edit($id)
+{
+    try {
 
-        $student = $studentModel->find( $id );
+        $response = $this->apiService->get(
+            'api/students/' . $id,
+            true
+        );
 
-        if ( !$student ) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound( lang('App.studentNotFound') );
+        if ($response['statusCode'] !== 200) {
+
+            return redirect()
+                ->to('/students')
+                ->with(
+                    'error',
+                    $response['data']['message']
+                        ?? 'Student not found.'
+                );
         }
 
-        $data = [
+        $classModel = new ClassModel();
+
+        return view('students/edit', [
             'title'      => 'Edit Student',
-            'student'    => $student,
+            'student'    => $response['data'],
             'classes'    => $classModel->findAll(),
             'validation' => \Config\Services::validation()
-        ];
+        ]);
 
-        return view( 'students/edit', $data );
+    } catch (\Throwable $e) {
+
+        return redirect()
+            ->to('/students')
+            ->with(
+                'error',
+                $e->getMessage()
+            );
     }
+}
 
-    public function update( $id )
- {
-        $rules = $this->studentRules();
 
-        if ( ! $this->validate( $this->studentRules( $id ) ) ) {
+public function update($id)
+{
+    try {
 
-            return redirect()
-            ->back()
-            ->withInput();
-        }
-
-        $model = new StudentModel();
-
-        $student = $model->find( $id );
-
-        if ( !$student ) {
+        if (!$this->validate($this->studentRules($id))) {
 
             return redirect()
-            ->to( '/students' )
-            ->with( 'error', lang('App.studentNotFound') );
+                ->back()
+                ->withInput();
         }
 
-        $photo = $this->request->getFile( 'Photo' );
+        $photo = $this->request->getFile('Photo');
 
-        $photoName = $student[ 'Photo' ];
+        $photoName = $this->request->getPost('ExistingPhoto');
 
-        if ( $photo && $photo->isValid() && !$photo->hasMoved() ) {
-
-            if ( !empty( $student[ 'Photo' ] ) && file_exists( FCPATH . 'uploads/students/' . $student[ 'Photo' ] ) ) {
-
-                unlink( FCPATH . 'uploads/students/' . $student[ 'Photo' ] );
-            }
+        if ($photo && $photo->isValid() && !$photo->hasMoved()) {
 
             $photoName = $photo->getRandomName();
 
-            $photo->move( FCPATH . 'uploads/students', $photoName );
+            $photo->move(
+                FCPATH . 'uploads/students',
+                $photoName
+            );
         }
 
-        $model->update( $id, [
+        $data = [
 
-            'RollNo'      => $this->request->getPost( 'RollNo' ),
-            'StudentName' => $this->request->getPost( 'StudentName' ),
-            'FatherName'  => $this->request->getPost( 'FatherName' ),
-            'Email'       => $this->request->getPost( 'Email' ),
-            'Phone'       => $this->request->getPost( 'Phone' ),
-            'Gender'      => $this->request->getPost( 'Gender' ),
-            'DOB'         => $this->request->getPost( 'DOB' ),
-            'Address'     => $this->request->getPost( 'Address' ),
-            'ClassID'     => $this->request->getPost( 'ClassID' ),
-            'Section' => trim( $this->request->getPost( 'Section' ) ),
-            'CNIC' => $this->request->getPost( 'CNIC' ),
-            'Photo'       => $photoName
+            'studentID' => (int) $id,
 
-        ] );
+            'rollNo' =>
+                $this->request->getPost('RollNo'),
+
+            'studentName' =>
+                $this->request->getPost('StudentName'),
+
+            'fatherName' =>
+                $this->request->getPost('FatherName'),
+
+            'email' =>
+                $this->request->getPost('Email'),
+
+            'phone' =>
+                $this->request->getPost('Phone'),
+
+            'gender' =>
+                $this->request->getPost('Gender'),
+
+            'dob' =>
+                $this->request->getPost('DOB'),
+
+            'address' =>
+                $this->request->getPost('Address'),
+
+            'classID' =>
+                (int) $this->request->getPost('ClassID'),
+
+            'section' =>
+                trim(
+                    $this->request->getPost('Section')
+                ),
+
+            'cnic' =>
+                $this->request->getPost('CNIC'),
+
+            'photo' =>
+                $photoName
+        ];
+
+        $response = $this->apiService->put(
+            'api/students/' . $id,
+            $data,
+            true
+        );
+
+        if (
+            $response['statusCode'] < 200 ||
+            $response['statusCode'] >= 300
+        ) {
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with(
+                    'error',
+                    $response['data']['message']
+                        ?? 'Unable to update student.'
+                );
+        }
 
         return redirect()
-        ->to( '/students' )->with('success', lang('App.studentUpdatedSuccessfully'));
- }
-  
+            ->to('/students')
+            ->with(
+                'success',
+                lang('App.studentUpdatedSuccessfully')
+            );
+
+    } catch (\Throwable $e) {
+
+        return redirect()
+            ->back()
+            ->withInput()
+            ->with(
+                'error',
+                $e->getMessage()
+            );
+    }
+}
 
 public function restore($id)
 {
-    $model = new StudentModel();
+    try {
 
-    $student = $model->find($id);
+        $response = $this->apiService->patch(
+            'api/students/' . $id . '/unarchive',
+            [],
+            true
+        );
 
-    if (!$student) {
-        return redirect()->to('/students/archive')
-            ->with('error', lang('App.studentNotFound'));
+        if (
+            $response['statusCode'] < 200 ||
+            $response['statusCode'] >= 300
+        ) {
+
+            return redirect()
+                ->to('/students/archive')
+                ->with(
+                    'error',
+                    $response['data']['message']
+                        ?? 'Unable to restore student.'
+                );
+        }
+
+        return redirect()
+            ->to('/students/archive')
+            ->with(
+                'success',
+                lang('App.studentRestoredSuccessfully')
+            );
+
+    } catch (\Throwable $e) {
+
+        return redirect()
+            ->to('/students/archive')
+            ->with(
+                'error',
+                $e->getMessage()
+            );
     }
-
-    $model->update($id, [
-        'Status' => 'Active'
-    ]);
-
-    return redirect()->to('/students/archive')
-->with('success', lang('App.studentRestoredSuccessfully'));
-
 }
+
 
 public function archive()
 {
-    $model = new StudentModel();
+    try {
 
-    $students = $model
-        ->select('Students.*, Classes.ClassName')
-        ->join('Classes', 'Classes.ClassID = Students.ClassID')
-        ->where('Students.Status', 'Inactive')
-        ->findAll();
+        $response = $this->apiService->get(
+            'api/students?status=Inactive',
+            true
+        );
 
-    return view('students/archive', [
-        'title' => 'Archived Students',
-        'students' => $students
-    ]);
+        if ($response['statusCode'] !== 200) {
+
+            return view('students/archive', [
+                'title' => 'Archived Students',
+                'students' => [],
+                'error' => $response['data']['message']
+                    ?? 'Unable to load archived students.'
+            ]);
+        }
+
+        $students = [];
+
+        foreach ($response['data'] ?? [] as $student) {
+
+            $students[] = [
+                'StudentID'   => $student['studentID'] ?? null,
+                'RollNo'      => $student['rollNo'] ?? null,
+                'StudentName' => $student['studentName'] ?? null,
+                'FatherName'  => $student['fatherName'] ?? null,
+                'ClassName'   => $student['className'] ?? null,
+                'Phone'       => $student['phone'] ?? null,
+                'CNIC'        => $student['cnic'] ?? null,
+                'Photo'       => $student['photo'] ?? null,
+            ];
+        }
+
+        return view('students/archive', [
+            'title' => 'Archived Students',
+            'students' => $students
+        ]);
+
+    } catch (\Throwable $e) {
+
+        log_message(
+            'error',
+            'Archived students API error: ' . $e->getMessage()
+        );
+
+        return view('students/archive', [
+            'title' => 'Archived Students',
+            'students' => [],
+            'error' => $e->getMessage()
+        ]);
+    }
 }
 
 private function studentRules($id = null)
@@ -518,9 +648,44 @@ public function archiveStudent($id)
 
 
  
+public function delete($id)
+{
+    try {
 
+        $response = $this->apiService->delete(
+            'api/students/' . $id,
+            true
+        );
+
+        if (
+            $response['statusCode'] < 200 ||
+            $response['statusCode'] >= 300
+        ) {
+
+            return redirect()
+                ->to('/students')
+                ->with(
+                    'error',
+                    $response['data']['message']
+                        ?? 'Unable to delete student.'
+                );
+        }
+
+        return redirect()
+            ->to('/students')
+            ->with(
+                'success',
+                'Student deleted successfully.'
+            );
+
+    } catch (\Throwable $e) {
+
+        return redirect()
+            ->to('/students')
+            ->with(
+                'error',
+                $e->getMessage()
+            );
+    }
 }
-
-
-
-
+}

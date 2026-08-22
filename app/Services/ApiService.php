@@ -7,7 +7,7 @@ use Config\App;
 class ApiService
 {
     private string $baseURL;
-
+    private string $apiKey;
     public function __construct()
     {
         $config = new App();
@@ -15,7 +15,9 @@ class ApiService
         $this->baseURL = rtrim(
             $config->apiBaseURL,
             '/'
+            
         );
+          $this->apiKey = $config->apiKey;
     }
 
     /**
@@ -65,10 +67,11 @@ private function request(
 
     $ch = curl_init($url);
 
-    $headers = [
-        'Content-Type: application/json',
-        'Accept: application/json',
-    ];
+ $headers = [
+    'Content-Type: application/json',
+    'Accept: application/json',
+    'X-API-KEY: ' . $this->apiKey,
+];
 
     /*
      * Add JWT when endpoint requires authentication
